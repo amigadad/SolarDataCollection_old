@@ -314,6 +314,18 @@ class RenogyRover(minimalmodbus.Instrument):
         register = self.read_register(57348)
         return BATTERY_TYPE.get(register)
 
+    def light_control_delay(self):
+        """
+        Read the light control delay
+        """
+        return self.read_register(57374)
+
+    def light_control_delay_write(self, value):
+        """
+        Write the light control delay
+        """
+        return self.write_register(57374, value)
+
     def system_info(self):
         try:
             return {
@@ -416,3 +428,5 @@ if __name__ == "__main__":
     # print('Charging Amp/Hours Today: ', rover.charging_amp_hours_today())
     # print('Discharging Amp/Hours Today: ', rover.discharging_amp_hours_today())
     # print('System Voltage Current: ', rover.system_voltage_current())
+    # rover.light_control_delay_write(7)
+    print('Light Control Delay: ', rover.light_control_delay())
