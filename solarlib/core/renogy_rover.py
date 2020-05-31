@@ -14,12 +14,12 @@ PRODUCT_TYPE = {
 }
 
 BATTERY_TYPE = {
-    0: 'user',
-    1: 'open',
-    2: 'sealed',
-    3: 'gel',
-    4: 'lithium',
-    5: 'self-customized'
+    0: 'User',
+    1: 'Open',
+    2: 'Sealed',
+    3: 'Gel',
+    4: 'Lithium',
+    5: 'Self-customized'
 }
 
 CHARGING_STATE = {
@@ -30,6 +30,14 @@ CHARGING_STATE = {
     4: 'boost',
     5: 'floating',
     6: 'current limiting'
+}
+
+SYSTEM_VOLTAGE = {
+    12: '12V',
+    24: '24V',
+    36: '36V',
+    48: '48V',
+    255: 'Auto_recognition'
 }
 
 
@@ -304,8 +312,14 @@ class RenogyRover(minimalmodbus.Instrument):
         """
         register = self.read_register(57347)
         setting = register >> 8
-        recognized_voltage = register & 0x00ff
-        return setting, recognized_voltage
+        """recognized_voltage = register & 0x00ff"""
+        return setting
+
+    def voltage_setting_label(self):
+        """
+        Assign text label equivalent to voltage setting number
+        """
+        return SYSTEM_VOLTAGE.get(self.voltage_setting())
 
     def battery_type(self):
         """
@@ -313,6 +327,111 @@ class RenogyRover(minimalmodbus.Instrument):
         """
         register = self.read_register(57348)
         return BATTERY_TYPE.get(register)
+
+    def high_voltage_disconnect(self):
+        """
+        Read the high voltage disconnect setting of the controller
+        """
+        register = self.read_register(57349, numberOfDecimals=1)
+        return register
+
+    def charge_limit_voltage(self):
+        """
+        Read the charge limit voltage setting of the controller
+        """
+        register = self.read_register(57350, numberOfDecimals=1)
+        return register
+
+    def equalize_charge_voltage(self):
+        """
+        Read the equalize charge voltage setting of the controller
+        """
+        register = self.read_register(57351, numberOfDecimals=1)
+        return register
+
+    def boost_charge_voltage(self):
+        """
+        Read the boost charge voltage setting of the controller
+        """
+        register = self.read_register(57352, numberOfDecimals=1)
+        return register
+
+    def float_charge_voltage(self):
+        """
+        Read the float charge voltage setting of the controller
+        """
+        register = self.read_register(57353, numberOfDecimals=1)
+        return register
+
+    def boost_charge_return_voltage(self):
+        """
+        Read the boost charge return voltage setting of the controller
+        """
+        register = self.read_register(57354, numberOfDecimals=1)
+        return register
+
+    def over_discharge_return_voltage(self):
+        """
+        Read the over discharge return voltage setting of the controller
+        """
+        register = self.read_register(57355, numberOfDecimals=1)
+        return register
+
+    def low_voltage_alarm(self):
+        """
+        Read the low voltage alarm setting of the controller
+        """
+        register = self.read_register(57356, numberOfDecimals=1)
+        return register
+
+    def over_discharge_voltage(self):
+        """
+        Read the over discharge voltage setting of the controller
+        """
+        register = self.read_register(57357, numberOfDecimals=1)
+        return register
+
+    def discharge_limit_voltage(self):
+        """
+        Read the discharge limit voltage setting of the controller
+        """
+        register = self.read_register(57358, numberOfDecimals=1)
+        return register
+
+    def over_discharge_delay_time(self):
+        """
+        Read the over discharge delay time (in seconds) setting of the controller
+        """
+        register = self.read_register(57360)
+        return register
+
+    def equalize_charge_time(self):
+        """
+        Read the equalize charge time (in minutes) setting of the controller
+        """
+        register = self.read_register(57361)
+        return register
+
+    def boost_charge_time(self):
+        """
+        Read the boost charge time (in minutes) setting of the controller
+        """
+        register = self.read_register(57362)
+        return register
+
+    def equalize_charge_interval(self):
+        """
+        Read the equalize charge interval (in days) setting of the controller
+        """
+        register = self.read_register(57363)
+        return register
+
+    def temperature_compensation(self):
+        """
+        Read the temperature compensation (mv/C/2V) setting of the controller
+        """
+        register = self.read_register(57364)
+        return register
 
     def light_control_delay(self):
         """
