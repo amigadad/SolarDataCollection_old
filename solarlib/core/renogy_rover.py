@@ -439,11 +439,12 @@ class RenogyRover(minimalmodbus.Instrument):
         """
         return self.read_register(57374)
 
-    def light_control_delay_write(self, value):
+    def light_control_delay_write(self, delay_time):
         """
         Write the light control delay
         """
-        return self.write_register(57374, value)
+        self.write_register(57374, delay_time)
+        return delay_time
 
     def system_info(self):
         try:
